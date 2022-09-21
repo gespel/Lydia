@@ -24,6 +24,7 @@ verbose = args.verb
 if(args.pwlist == None):
     print("No passwordlist defined!")
     exit()
+passlistpath = args.pwlist
 if(args.logfile == None):
     print("No logfilepath defined. Using default logs.txt")
     logfilepath = "log.txt"
@@ -55,7 +56,7 @@ def go(threadnr):
         if(verbose == True):
             print("[" + colored("Thread " + threadnr, "red") + "][" + colored("INFO", "cyan") + "] Checking wether " + ip + " has open port 22")
         if(checkForSSH(ip) == True):
-            l = Lydia(ip, threadnr)
+            l = Lydia(ip, threadnr, passlistpath, logfilepath)
             l.hack()
 
 if __name__ == "__main__":

