@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from tabnanny import verbose
 from lydia import Lydia
 from random import randint
