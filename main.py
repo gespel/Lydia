@@ -18,6 +18,27 @@ parser.add_argument("-q", "--quiet", dest="verb",
                     help="don't print status messages to stdout")
 parser.add_argument("-t", "--threads", dest="threadcount",
                     help="Number of threads to work with")
+print("                                                                                                   ")
+print("                           ▄█       ▄██   ▄   ████████▄   ▄█     ▄████████                         ")
+print("                          ███       ███   ██▄ ███   ▀███ ███    ███    ███                         ")
+print("                          ███       ███▄▄▄███ ███    ███ ███▌   ███    ███                         ")
+print("                          ███       ▀▀▀▀▀▀███ ███    ███ ███▌   ███    ███                         ")
+print("                          ███       ▄██   ███ ███    ███ ███▌ ▀███████████                         ")
+print("                          ███       ███   ███ ███    ███ ███    ███    ███                         ")
+print("                          ███▌    ▄ ███   ███ ███   ▄███ ███    ███    ███                         ")
+print("                          █████▄▄██  ▀█████▀  ████████▀  █▀     ███    █▀                          ")
+print("                          ▀                                                                        ")
+print("  _______ __                          __                     __        __               __         ")
+print(" |       |  |--.-----.   .---.-.--.--|  |_.-----.-----.-----|  |--.   |  |--.----.--.--|  |_.-----.")
+print(" |.|   | |     |  -__|   |  _  |  |  |   _|  _  |__ --|__ --|     |   |  _  |   _|  |  |   _|  -__|")
+print(" `-|.  |-|__|__|_____|   |___._|_____|____|_____|_____|_____|__|__|   |_____|__| |_____|____|_____|")
+print("   |:  |                                                                                           ")
+print("   |::.|                                                                                           ")
+print("   `---'                                                                                           ")
+print("===================================================================================================")
+print("=                     Made Sten (Gespel) Heimbrodt [@Sten_Heimbrodt]                              =")
+print("===================================================================================================")
+
 
 args = parser.parse_args()
 verbose = args.verb
@@ -38,6 +59,7 @@ else:
 
 def generateIp():
     return str(randint(1, 255)) + "." + str(randint(1, 255)) + "." + str(randint(1, 255)) + "." + str(randint(1, 255))
+
 def checkForSSH(ip):
     a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     a_socket.settimeout(3)
@@ -47,9 +69,9 @@ def checkForSSH(ip):
 
     if result_of_check == 0:
         return True
-
     else:
         return False
+
 def go(threadnr):
     while True:
         ip = generateIp()
