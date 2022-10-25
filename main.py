@@ -8,6 +8,28 @@ import time
 from termcolor import colored
 import sys
 from argparse import ArgumentParser
+from PySide6.QtWidgets import (QLineEdit, QPushButton, QApplication,
+    QVBoxLayout, QDialog)
+
+class Form(QDialog):
+
+    def __init__(self, parent=None):
+        super(Form, self).__init__(parent)
+        # Create widgets
+        self.edit = QLineEdit("Write my name here")
+        self.button = QPushButton("Show Greetings")
+        # Create layout and add widgets
+        layout = QVBoxLayout()
+        layout.addWidget(self.edit)
+        layout.addWidget(self.button)
+        # Set dialog layout
+        self.setLayout(layout)
+        # Add button signal to greetings slot
+        self.button.clicked.connect(self.greetings)
+
+    # Greets the user
+    def greetings(self):
+        print(f"Hello {self.edit.text()}")
 
 parser = ArgumentParser()
 parser.add_argument("-p", "--passwordlist", dest="pwlist",
@@ -17,6 +39,7 @@ parser.add_argument("-l", "--logfile", dest="logfile",
 parser.add_argument("-q", "--quiet", dest="verb",
                     action="store_false", default=True,
                     help="don't print status messages to stdout")
+parser.add_argument("-g", "--gui", dest="gui", action="store_true", default=False, help="start gui")
 parser.add_argument("-t", "--threads", dest="threadcount",
                     help="Number of threads to work with")
 print("                                                                                                   ")
@@ -41,8 +64,18 @@ print("=                     Made Sten (Gespel) Heimbrodt [@Sten_Heimbrodt]     
 print("===================================================================================================")
 
 
+
+
 args = parser.parse_args()
 verbose = args.verb
+if(args.gui):
+    # Create the Qt Application
+    app = QApplication(sys.argv)
+    # Create and show the form
+    form = Form()
+    form.show()
+    # Run the main Qt loop
+    sys.exit(app.exec())
 if(args.pwlist == None):
     print("No passwordlist defined!")
     exit()
