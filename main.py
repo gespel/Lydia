@@ -16,23 +16,23 @@ parser.add_argument("-q", "--quiet", dest="verb",
 parser.add_argument("-g", "--gui", dest="gui", action="store_true", default=False, help="start gui")
 parser.add_argument("-t", "--threads", dest="threadcount",
                     help="Number of threads to work with")
-print("                                                                                                   ")
-print("                           ▄█       ▄██   ▄   ████████▄   ▄█     ▄████████                         ")
-print("                          ███       ███   ██▄ ███   ▀███ ███    ███    ███                         ")
-print("                          ███       ███▄▄▄███ ███    ███ ███▌   ███    ███                         ")
-print("                          ███       ▀▀▀▀▀▀███ ███    ███ ███▌   ███    ███                         ")
-print("                          ███       ▄██   ███ ███    ███ ███▌ ▀███████████                         ")
-print("                          ███       ███   ███ ███    ███ ███    ███    ███                         ")
-print("                          ███▌    ▄ ███   ███ ███   ▄███ ███    ███    ███                         ")
-print("                          █████▄▄██  ▀█████▀  ████████▀  █▀     ███    █▀                          ")
-print("                          ▀                                                                        ")
-print("  _______ __                          __                     __        __               __         ")
-print(" |       |  |--.-----.   .---.-.--.--|  |_.-----.-----.-----|  |--.   |  |--.----.--.--|  |_.-----.")
-print(" |.|   | |     |  -__|   |  _  |  |  |   _|  _  |__ --|__ --|     |   |  _  |   _|  |  |   _|  -__|")
-print(" `-|.  |-|__|__|_____|   |___._|_____|____|_____|_____|_____|__|__|   |_____|__| |_____|____|_____|")
-print("   |:  |                                                                                           ")
-print("   |::.|                                                                                           ")
-print("   `---'                                                                                           ")
+print(colored("                                                                                                   ", "cyan"))
+print(colored("                           ▄█       ▄██   ▄   ████████▄   ▄█     ▄████████                         ", "cyan"))
+print(colored("                          ███       ███   ██▄ ███   ▀███ ███    ███    ███                         ", "cyan"))
+print(colored("                          ███       ███▄▄▄███ ███    ███ ███▌   ███    ███                         ", "cyan"))
+print(colored("                          ███       ▀▀▀▀▀▀███ ███    ███ ███▌   ███    ███                         ", "cyan"))
+print(colored("                          ███       ▄██   ███ ███    ███ ███▌ ▀███████████                         ", "cyan"))
+print(colored("                          ███       ███   ███ ███    ███ ███    ███    ███                         ", "cyan"))
+print(colored("                          ███▌    ▄ ███   ███ ███   ▄███ ███    ███    ███                         ", "cyan"))
+print(colored("                          █████▄▄██  ▀█████▀  ████████▀  █▀     ███    █▀                          ", "cyan"))
+print(colored("                          ▀                                                                        ", "cyan"))
+print(colored("  _______ __                          __                     __        __               __         ", "red"))
+print(colored(" |       |  |--.-----.   .---.-.--.--|  |_.-----.-----.-----|  |--.   |  |--.----.--.--|  |_.-----.", "red"))
+print(colored(" |.|   | |     |  -__|   |  _  |  |  |   _|  _  |__ --|__ --|     |   |  _  |   _|  |  |   _|  -__|", "red"))
+print(colored(" `-|.  |-|__|__|_____|   |___._|_____|____|_____|_____|_____|__|__|   |_____|__| |_____|____|_____|", "red"))
+print(colored("   |:  |                                                                                           ", "red"))
+print(colored("   |::.|                                                                                           ", "red"))
+print(colored("   `---'                                                                                           ", "red"))
 print("===================================================================================================")
 print("=                     Made Sten (Gespel) Heimbrodt [@Sten_Heimbrodt]                              =")
 print("===================================================================================================")
@@ -44,13 +44,24 @@ verbose = args.verb
 
 
 
-
+def print_help():
+    pass
 
 def parseCommand(command, passlistpath, logfilepath):
     basecommand = command[0]
     if basecommand == "go":
-        s = LydiaScanner(True, passlistpath, logfilepath)
+        s = LydiaScanner(True, passlistpath, logfilepath, True)
         s.go(32)
+    elif basecommand == "scan":
+        s = LydiaScanner(True, passlistpath, logfilepath, False)
+        s.go(32)
+
+
+    elif basecommand == "exit":
+        print(colored("Bye Bye :)", "cyan"))
+        exit()
+    else:
+        print(colored("Unknown command!", "red"))
 
 
 def menuLoop():
@@ -62,7 +73,7 @@ def menuLoop():
         parseCommand(inarr, "rockyoufirst.txt", logfile_name)
 
 
-if (args.pwlist == None and args.logfile == None and args.threadcount == None):
+if args.pwlist is None and args.logfile is None and args.threadcount is None:
     menuLoop()
 
 if (args.pwlist == None):

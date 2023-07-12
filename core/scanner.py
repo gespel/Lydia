@@ -6,10 +6,15 @@ import socket
 
 
 class LydiaScanner:
-    def __init__(self, verbose, passlistpath, logfilepath):
+
+    def __init__(self, verbose, logfilepath):
+        pass
+
+    def __init__(self, verbose, passlistpath, logfilepath, hacking):
         self.verbose = verbose
         self.passlistpath = passlistpath
         self.logfilepath = logfilepath
+        self.hacking = hacking
 
     def go(self, threads):
         for i in range(0, threads):
@@ -43,6 +48,9 @@ class LydiaScanner:
             if self.verbose:
                 print("[" + colored("Thread " + threadnr, "red") + "][" + colored("INFO",
                                                                                   "cyan") + "] Checking wether " + ip + " has open port 22")
-            if self.checkForSSH(ip):
+            if self.checkForSSH(ip) and self.hacking:
                 l = Lydia(ip, threadnr, self.passlistpath, self.logfilepath)
                 l.hack()
+            elif self.checkForSSH(ip):
+                logfile = open(self.logfilepath, "a", encoding='utf-8', errors='ignore')
+                logfile.write(ip + "\n")
