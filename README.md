@@ -1,5 +1,5 @@
 # Lydia
-An IP Scanner with auto ssh bruter and wordlist cracker. KISS. Thats it.
+An IP Scanner with auto ssh bruter and wordlist cracker
 ## Dependency
 The Cracker needs the paramiko Library. 
 ### Install and first launch
