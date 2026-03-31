@@ -18,8 +18,8 @@ fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> boo
                 Err(_) => false,
             }
         },
-        Err(_) => {
-            println!("Unable to connect to target!");
+        Err(e) => {
+            println!("Unable to connect to target! {:?}", e);
             false
         }
     }
