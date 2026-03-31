@@ -26,7 +26,7 @@ fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> boo
 }
 
 fn main() {
-    let result = check_ssh_login("", 22, "", "");
+    let result = check_ssh_login("127.0.0.1", 2222, "root", "password");
 
     match result {
         true => {
