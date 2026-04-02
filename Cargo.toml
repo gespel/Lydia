@@ -4,4 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+chrono = "0.4.44"
+colored = "3.1.1"
+env_logger = "0.11.10"
+log = "0.4.29"
 ssh2 = "0.9.5"

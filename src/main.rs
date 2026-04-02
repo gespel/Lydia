@@ -1,5 +1,10 @@
 use ssh2::Session;
 use std::net::TcpStream;
+use colored::Colorize;
+use std::io::Write;
+use chrono::Local;
+use env_logger::Builder;
+use log::LevelFilter;
 
 fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> bool {
     let tcp = TcpStream::connect((host, port)).map_err(|e| format!("TCP connection failed: {}", e));
@@ -13,10 +18,11 @@ fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> boo
 
             match sess.userauth_password(username, password) {
                 Ok(_) => {
+                    log::info!("Login found! target: {} user: {} password: {}", host.green(), username.green(), password.green());
                     sess.authenticated()
                 },
                 Err(e) => {
-                    println!("Unable to login! {:?}", e);
+                    log::info!("Login failed! target: {} user: {} password: {} {}", host.red(), username.red(), password.red(), e.message().purple().italic());
                     false
                 },
             }
@@ -29,14 +35,20 @@ fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> boo
 }
 
 fn main() {
-    let result = check_ssh_login("127.0.0.1", 2222, "root", "password");
+    Builder::new()
+        .format(|buf, record| {
+            writeln!(buf,
+                "[{}] {} [{}] - {}",
+                "Lydia".yellow(),
+                Local::now().format("%Y-%m-%dT%H:%M:%S").to_string().blue(),
+                record.level(),
+                record.args()
+            )
+        })
+        .filter(None, LevelFilter::Info)
+        .init();
 
-    match result {
-        true => {
-            println!("Login successful!");
-        },
-        false => {
-            println!("Login failed.");
-        }
-    }
+    check_ssh_login("127.0.0.1", 2222, "root", "passworda");
+    check_ssh_login("127.0.0.1", 2222, "root", "password");
+
 }
