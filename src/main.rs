@@ -15,7 +15,10 @@ fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> boo
                 Ok(_) => {
                     sess.authenticated()
                 },
-                Err(_) => false,
+                Err(e) => {
+                    println!("Unable to login! {:?}", e);
+                    false
+                },
             }
         },
         Err(e) => {
