@@ -39,7 +39,7 @@ fn check_ssh_login(host: &str, port: u16, username: &str, password: &str) -> boo
                 },
                 Err(e) => {
                     log::error!("SSH handshake failed: {}", e);
-                    thread::sleep(time::Duration::from_millis(10000));
+                    thread::sleep(time::Duration::from_millis(20000));
                     false
                 }
             }
