@@ -2,10 +2,6 @@ use ssh2::Session;
 use core::time;
 use std::{net::TcpStream, thread};
 use colored::Colorize;
-use std::io::Write;
-use chrono::Local;
-use env_logger::Builder;
-use log::LevelFilter;
 use rand::distr::{Alphanumeric, SampleString};
 
 pub struct SSHCracker {

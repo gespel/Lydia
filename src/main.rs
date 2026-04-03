@@ -1,18 +1,12 @@
 mod cracker;
-use ssh2::Session;
-use core::time;
-use std::{net::TcpStream, thread};
 use colored::Colorize;
 use std::io::Write;
 use chrono::Local;
 use env_logger::Builder;
 use log::LevelFilter;
-use rand::distr::{Alphanumeric, SampleString};
 use cracker::ssh_cracker::create_ssh_brute_attack_handle;
 
-
-#[tokio::main]
-async fn main() {
+fn setup_logging() {
     Builder::new()
         .format(|buf, record| {
             writeln!(buf,
@@ -25,6 +19,11 @@ async fn main() {
         })
         .filter(None, LevelFilter::Info)
         .init();
+}
+
+#[tokio::main]
+async fn main() {
+    setup_logging();
 
     create_ssh_brute_attack_handle("127.0.0.1", 2222);
     create_ssh_brute_attack_handle("sten-heimbrodt.de", 22);
