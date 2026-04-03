@@ -1,6 +1,7 @@
 mod cracker;
 use colored::Colorize;
-use std::io::Write;
+use core::time;
+use std::{io::Write, thread};
 use chrono::Local;
 use env_logger::Builder;
 use log::LevelFilter;
@@ -29,6 +30,6 @@ async fn main() {
     create_ssh_brute_attack_handle("sten-heimbrodt.de", 22);
 
     loop {
-
+        thread::sleep(time::Duration::from_millis(100));
     }
 }
