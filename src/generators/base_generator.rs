@@ -1,10 +1,11 @@
 use std::{fs::{File}, io::{BufRead, BufReader}};
 
-use rand::RngExt;
+use rand::{RngExt, rngs::ThreadRng};
 
 
 pub struct BaseGenerator {
-    pub words: Vec<String>
+    pub words: Vec<String>,
+    rng: ThreadRng
 }
 
 impl BaseGenerator {
@@ -13,13 +14,13 @@ impl BaseGenerator {
         let buf = BufReader::new(file);
         let words: Vec<String> = buf.lines().map(|l| l.expect("Could not parse line")).collect();
         BaseGenerator {
-            words
+            words,
+            rng: rand::rng()
         }
     }
 
-    pub fn generate_word(&self) -> String {
-        let mut rng = rand::rng();
-        let out = format!("{}{}", self.words[rng.random_range(0..self.words.len())], rng.random_range(0..9));
+    pub fn generate_word(&mut self) -> String {
+        let out = format!("{}{}", self.words[self.rng.random_range(0..self.words.len())], self.rng.random_range(0..9));
         out
     }
 }
