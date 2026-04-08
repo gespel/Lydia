@@ -29,6 +29,7 @@ async fn main() {
     setup_logging();
 
     let b = BaseGenerator::new("rockyoufirst.txt");
+    println!("Generated word: {}", b.generate_word());
     println!("{:?}", b.words);
     //ssh_cracker::create_ssh_brute_attack_handle("127.0.0.1", 2222);
     ssh_cracker::create_ssh_brute_attack_handle("sten-heimbrodt.de", 22);

@@ -1,4 +1,6 @@
-use std::{fs::{self, File}, io::{BufRead, BufReader}};
+use std::{fs::{File}, io::{BufRead, BufReader}};
+
+use rand::RngExt;
 
 
 pub struct BaseGenerator {
@@ -13,5 +15,11 @@ impl BaseGenerator {
         BaseGenerator {
             words
         }
+    }
+
+    pub fn generate_word(&self) -> String {
+        let mut rng = rand::rng();
+        let out = format!("{}{}", self.words[rng.random_range(0..self.words.len())], rng.random_range(0..9));
+        out
     }
 }
