@@ -2,10 +2,13 @@ use std::{fs::{File}, io::{BufRead, BufReader}};
 
 use rand::{RngExt, rngs::ThreadRng};
 
+use crate::generators::leetifyer::Leetifyer;
+
 
 pub struct BaseGenerator {
     pub words: Vec<String>,
-    rng: ThreadRng
+    rng: ThreadRng,
+    leet: Leetifyer
 }
 
 impl BaseGenerator {
@@ -15,12 +18,13 @@ impl BaseGenerator {
         let words: Vec<String> = buf.lines().map(|l| l.expect("Could not parse line")).collect();
         BaseGenerator {
             words,
-            rng: rand::rng()
+            rng: rand::rng(),
+            leet: Leetifyer::new()
         }
     }
 
     pub fn generate_word(&mut self) -> String {
-        let out = format!("{}{}", self.words[self.rng.random_range(0..self.words.len())], self.rng.random_range(0..9));
+        let out = format!("{}{}", self.leet.leetify(self.words[self.rng.random_range(0..self.words.len())].to_string()), self.rng.random_range(0..9));
         out
     }
 }
