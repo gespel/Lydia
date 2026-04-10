@@ -19,7 +19,7 @@ impl BaseGenerator {
         BaseGenerator {
             words,
             rng: rand::rng(),
-            leet: Leetifyer::new()
+            leet: Leetifyer::new(0.7_f32)
         }
     }
 
